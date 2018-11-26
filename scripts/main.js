@@ -49,20 +49,40 @@ function operate(operator, a, b) {
 }
 
 let display = $('#display');
-let number = 0
+let number = 0;
+let number1 = 0;
+let operator = '';
 
+// Numbuttons clicked
 $('.numButtons').click(function( event ) {
 	$('#display').append(event.target.textContent)
-	return number = ('#display').textContent;
+	return number = $('#display').text();
+});
+
+// Operator buttons clicked save first number
+$('.opButtons').click(function( event ) {
+	number1 = number;
+	number = 0;
+	$('#display').text('');
+	operator = event.target.textContent;
+	return number1;
 });
 
 
+// Clear everything
+
+$('#clear').click(function() {
+	$('#display').text('');
+	number1 = 0;
+	number2 = 0;
+	number = 0;
+})
 
 
-
-
-
-
+// Equals
+$('#equals').click(function() {
+	
+})
 
 
 
