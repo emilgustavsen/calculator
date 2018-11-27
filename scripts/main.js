@@ -32,6 +32,13 @@
 // 		return (num * factorial(num - 1));
 // 	}
 // }
+let display = $('#display');
+let numBeforeOperator = '';
+let number = [];
+let operator = [];
+let i = 0;
+let temporaryResult = 0;
+let result = 0;
 
 function add (a, b) {
 	return a + b;
@@ -49,36 +56,48 @@ function multiply (a, b) {
 	return a * b;
 }
 
+
 function operate (operator, a, b) {
 	if (operator == 'add') {
-		return add(a, b)
+		return add(parseInt(a), parseInt(b))
 	}
 	else if (operator == 'subtract') {
-		return subtract(a, b)
+		return subtract(parseInt(a), parseInt(b))
 	}
 	else if (operator == 'divide') {
-		return divide(a, b)
+		return divide(parseInt(a), parseInt(b))
 	}
 	else if (operator == 'multiply') {
-		return multiply(a, b)
+		return multiply(parseInt(a), parseInt(b))
 	}
 }
+
+// NEED TO FIX THE RETURN STATEMENT, SEEMS LIKE TEMPORARY RESULT IS ALWAYS RETURNED AFTER 3
+// function useOperate() {
+// 	number[i] = numBeforeOperator
+// 	if (number[2] == undefined) {
+// 		return temporaryResult = operate(operator[0], number[0], number[1]);	
+// 	}
+// 	else {
+// 		temporaryResult = operate(operator[0], number[0], number[1]);
+// 	for (let o = 1; o <= i; o += 1) {
+// 		temporaryResult = operate(operator[o], temporaryResult, number[o+1]);
+// 		if (o = i + 1) return temporaryResult;
+// 	}
+// }
+// 	return temporaryResult;
+// }
 
 function clear() {
 	$('#display').text('');
-	number = [];
 	numBeforeOperator = '';
-	operator = '';
+	number = [];
+	operator = [];
 	i = 0;
+	temporaryResult = 0;
 	result = 0;
 }
 
-let display = $('#display');
-let numBeforeOperator = '';
-let number = [];
-let operator = '';
-let i = 0;
-let result = 0;
 
 // Numbuttons clicked
 $('.numButtons').click(function( event ) {
@@ -94,6 +113,7 @@ $('.opButtons').click(function( event ) {
 	if (result !== 0) {
 		number[0] = result;
 		result = 0;
+		temporaryResult = 0;
 		i = 0;
 	}
 	else {
@@ -102,25 +122,43 @@ $('.opButtons').click(function( event ) {
 	numBeforeOperator = '';
 	$('#display').append(' ' + event.target.textContent + ' ')
 	i += 1;
-	return operator = event.target.name;
+	operator[i-1] = event.target.name;
+	
+	if (i == 2) {
+		temporaryResult = operate(operator[i-2], number[0], number[1])
+	}
+	else if (i > 2) {
+		temporaryResult = operate(operator[i-2], temporaryResult, number[i-1])
+	}
 });
-
 
 $('#clear').click(function() {
 	clear();
 });
 
 
-// Equals
+
+// Equals *Add code to round down decimals*
 $('#equals').click(function() {
-	numBeforeOperator = parseInt(numBeforeOperator)
-	number[i-1] = parseInt(number[i-1])
-	result = operate(operator, number[i-1], numBeforeOperator);
-	$(display).text(result);
-	return result;
+	if (i <= 0) {
+		alert('Error - You need to enter in at least one operator')
+		clear();
+	}
+	else if (i == 1) {
+		result = operate(operator[0], number[0], numBeforeOperator)
+		$(display).text(result);
+		return result;
+	}
+	else {
+		result = operate(operator[i-1], temporaryResult, numBeforeOperator)
+		$(display).text(result);
+		return result;
+	}
+});
+
+
+$('#delete').click(function() {
+	// Add code to remove last entry
 })
-
-
-
 
 
